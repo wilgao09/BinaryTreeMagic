@@ -1,4 +1,9 @@
 public enum Color {
     RED,
-    BLACK
+    BLACK;
+
+    public static <T extends Comparable<T>> Color of(Node<RedBlackData<T>> n) {
+        if (n == null) return Color.BLACK;
+        return n.getData().getColor();
+    }
 }

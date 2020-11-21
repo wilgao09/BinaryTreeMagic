@@ -24,6 +24,7 @@ public abstract class Tree<T extends Comparable<T>> {
     
     public Node<T> traverseIntoPosition(Node<T> currNode,T val) {
         Node<T> cursor = currNode;
+        if (cursor == null || val == null) return null;
         if (cursor.getData().compareTo(val) == 0) {
             return cursor;
         }
@@ -34,5 +35,9 @@ public abstract class Tree<T extends Comparable<T>> {
             if (cursor.getLeft() == null) return cursor;
             return traverseIntoPosition(currNode.getLeft(), val);
         }
+    }
+
+    public String toString() {
+        return this.root.toString();
     }
 }

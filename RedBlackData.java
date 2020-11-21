@@ -31,5 +31,9 @@ public class RedBlackData<T extends Comparable<T>> implements Comparable<RedBlac
     public int compareTo(RedBlackData<T> o) {
         return this.data.compareTo(o.getData());
     }
+
+    public String toString() {
+        return "(" + this.color + ") " + this.data.toString();
+    }
     
 }

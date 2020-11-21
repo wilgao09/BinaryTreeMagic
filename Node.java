@@ -74,13 +74,15 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>>{
         if (this.left != null) {
             throw new NoSpaceException("Left occupied");
         }
-        this.left = lChild;
+        if (lChild != null)
+            this.left = lChild;
         lChild.setParent(this);
     }
     public Node<T> insertLeftForce(Node<T> lChild) {
         Node<T> toR = this.left;
         this.left = lChild;
-        lChild.setParent(this);
+        if (lChild != null)
+            lChild.setParent(this);
         return toR;
     }
 
@@ -88,13 +90,15 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>>{
         if (this.right != null) {
             throw new NoSpaceException("Right occupied");
         }
-        this.right = rChild;
+        if (rChild != null)
+            this.right = rChild;
         rChild.setParent(this);
     }
     public Node<T> insertRightForce(Node<T> rChild) {
         Node<T> toR = this.right;
         this.right = rChild;
-        rChild.setParent(this);
+        if (rChild != null)
+            rChild.setParent(this);
         return toR;
     }
 
@@ -113,4 +117,97 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>>{
     }
 
 
+    public Side side() {
+        if (this.parent == null) return Side.NOT;
+        if (this.parent.left == this && this.parent.right == this) return Side.BOTH;
+        if (this.parent.left == this) return Side.LEFT;
+        if (this.parent.right == this) return Side.RIGHT;
+        return Side.NOT;
+    }
+
+    public void rotateRight() {
+        if (this.parent == null) return;
+        Node<T> beta = this.insertRightForce(this.parent);
+        this.right.insertLeftForce(beta);
+    }
+    public void rotateLeft() {
+        if (this.parent == null) return;
+        Node<T> beta = this.insertLeftForce(this.parent);
+        this.left.insertRightForce(beta);
+    }
+
+    public void rotate(Side s) {
+        if (s == Side.LEFT) {
+            this.rotateLeft();
+        } else {
+            this.rotateRight();
+        }
+    }
+
+    public Node<T> getChild(Side s) {
+        if (s == Side.LEFT)
+            return this.left;
+        else    
+            return this.right;
+    }
+
+    public String toString() {
+        String toR = this.data.toString() + "\n";
+        System.out.println("cp 1");
+        if (this.left != null) {
+            toR += this.left.toString(1) + "\n";
+        }
+        System.out.println("cp 2");
+        if (this.right != null) {
+            toR += this.right.toString(1) + "\n";
+        }
+        System.out.println("HERE TREE?");
+        return toR;
+    }
+    public String toString(int order) {
+        String toR = "\\_";
+        for (int n = 0 ;n != order; n++) {
+            toR = "    " + toR;;
+        }
+        toR += this.data.toString() + "\n";
+        if (this.left != null) {
+            toR += this.left.toString(order+1) + "\n";
+        }
+        if (this.right != null) {
+            toR += this.right.toString(order+1) + "\n";
+        }
+        return toR;
+
+    }
+    // public void rotateRight() {
+    //     Node<T> parent = this.parent;
+    //     // if (this.parent == null) return;
+    //     Node<T> ii = this.getLeft();
+    //     Node<T> b = ii.insertRightForce(this);
+    //     this.insertLeft(b);
+    //     if (parent != null) {
+    //         if (parent.left == this) {
+    //             parent.insertLeftForce(ii);
+    //         } else {
+    //             parent.insertRightForce(ii);
+    //         }
+    //     }
+
+    // }
+
+    // public void rotateLeft() {
+    //     Node<T> parent = this.parent;
+    //     if (this.parent == null) return;
+    //     Node<T> i = this.getRight();
+    //     Node<T> b = i.insertLeftForce(this);
+    //     this.insertRight(b);
+    //     if (parent != null) {
+    //         if (parent.left == this) {
+    //             parent.insertLeftForce(i);
+    //         } else {
+    //             parent.insertRightForce(i);
+    //         }
+    //     }
+    // }
+    
 }
